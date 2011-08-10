@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<event category="CREATE" id="0">
+  <actions>
+    <action id="603" library="1">
+      <!--action name: Code-->
+      <kind>CODE</kind>
+      <allowRelative>false</allowRelative>
+      <question>false</question>
+      <canApplyTo>true</canApplyTo>
+      <actionType>CODE</actionType>
+      <functionName/>
+      <relative>false</relative>
+      <not>false</not>
+      <appliesTo>.self</appliesTo>
+      <arguments>
+        <argument kind="STRING">chooses=show_message_ext("lib 패커 방식　　", "잠금풀기", "잠금", "")
+file_open=get_open_filename("lib파일을 선택해주세요|*.lib", "")
+
+if chooses=0 or file_open=""
+{
+game_end()
+}
+else
+{
+if chooses=1
+{
+open=file_bin_open(file_open, 2)
+file_bin_seek(open, 4)
+seek=file_bin_read_byte(open)
+file_bin_seek(open, 8+seek)
+file_bin_write_byte(open, round(random(230))+10)
+file_bin_write_byte(open, round(random(230))+10)
+file_bin_close(open)
+
+show_message("완료 (제작 - wnsrn3436)　　")
+game_end()
+}
+
+if chooses=2
+{
+open=file_bin_open(file_open, 2)
+file_bin_seek(open, 4)
+seek=file_bin_read_byte(open)
+file_bin_seek(open, 8+seek)
+file_bin_write_byte(open, 1)
+file_bin_write_byte(open, 0)
+file_bin_close(open)
+
+show_message("완료 (제작 - wnsrn3436)　　")
+game_end()
+}
+}
+</argument>
+      </arguments>
+    </action>
+  </actions>
+</event>
