@@ -1,20 +1,22 @@
 # GameMaker LIB Lock/Unlock Tool
 
-A tool that locks or unlocks a GameMaker action library file (`.lib`) for editing. A locked `.lib` cannot be opened and edited in the Library Maker. It was made by reverse engineering GameMaker's lib file format.
+[한국어](README.ko.md)
+
+A tool that locks a GameMaker action library file (`.lib`) so that it cannot be edited even when opened in the Library Maker, or removes an existing lock. It was made by reverse engineering GameMaker's lib file format.
 
 <p>
-  <img src="docs/screenshots/screenshot-1.png" width="480" alt="Lock/unlock selection">
+  <img src="docs/screenshots/screenshot-1.png" width="480" alt="Lock/unlock selection screen">
 </p>
 
 
 ## How to use
 
-Download it from Releases and run it, pick lock or unlock, then choose a `.lib` file. A completion message appears, and it closes once you dismiss it. It edits the file in place, so back it up first.
+Download it from Releases and run it, pick lock or unlock, then choose a `.lib` file. A completion message appears, and the tool closes when you click OK. It edits the file in place, so it is a good idea to back it up first.
 
 
 ## How it works
 
-Whether a `.lib` is locked is decided by the library ID written inside it. The file starts with a 4 byte version and the name length, and the ID follows right after the name, so the byte at offset 4 gives the name length, and the two bytes at `8 + name length` are the ones changed. GameMaker treats a library with a small ID as a built in one and refuses to let it be edited. Lock therefore overwrites that spot with `01 00` to make the ID 1, and unlock writes random values to give it a large ID again.
+The library ID written inside a `.lib` decides whether it is locked. The file starts with a 4-byte version and the name length, and the ID follows right after the name, so the tool reads the name length from the byte at offset 4 and changes the two bytes at offset `8 + name length`. GameMaker treats a library with a small ID as a built-in library and blocks editing it. Locking therefore overwrites that spot with `01 00` to make the ID 1, and unlocking writes random values to turn it back into a large ID.
 
 ```gml
 open = file_bin_open(file_open, 2)
@@ -31,7 +33,7 @@ file_bin_write_byte(open, round(random(230))+10)
 file_bin_write_byte(open, round(random(230))+10)
 ```
 
-Comparing a locked and an unlocked `.lib` in a hex editor is how these two bytes were found to be what separates the two.
+Comparing a locked `.lib` and an unlocked `.lib` in a hex editor showed that these two bytes decide the lock.
 
 
 ## Files
